@@ -15,6 +15,7 @@ public class Test02 {
 
     public static void main(String[] args) {
         Lock lock = new ReentrantLock();
+
         Condition condition = lock.newCondition();
     }
 }
