@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd" default-autowire="byType">
+    <context:component-scan base-package="service"/>
+    <bean id="springListenner" class="service.SpringListenner"/>
+    <bean id="service01" class="service.service.Service01"/>
+    <bean id="service02" class="service.service.Service02"/>
+    <bean id="service03" class="service.service.Service03"/>
+
+<!--    <bean id="injectValueService" class="service.annotation.InjectValueService"/>-->
+    <bean id="annotationTest01" class="service.testAnnotation.AnnotationTest01"/>
+
+</beans>
