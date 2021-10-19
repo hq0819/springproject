@@ -1,6 +1,9 @@
 package service.Test02;
 
-import org.springframework.beans.BeanUtils;
+import com.sun.deploy.util.StringUtils;
+
+import java.sql.Array;
+import java.util.ArrayList;
 
 /**
  * @ClassName TestE
@@ -11,17 +14,9 @@ import org.springframework.beans.BeanUtils;
  **/
 public class TestE {
     public static void main(String[] args) {
-        B b = new B();
-        b.setName("zx");
-        b.setAge("18");
-        b.setAddr("xxxx");
-        b.setPhone("1900");
-        B b1 = new B();
-        C c = new C();
-        BeanUtils.copyProperties(b,c);
+        ArrayList<String> strings = new ArrayList<>();
 
-        System.out.println(c);
-        System.out.println(b);
-
+        String qewqw = StringUtils.join(strings, "qewqw");
+        System.out.println(qewqw);
     }
 }
