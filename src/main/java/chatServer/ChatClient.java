@@ -27,8 +27,8 @@ public class ChatClient {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
-                        pipeline.addLast(new MessageHandlerCodec());
                         pipeline.addLast(new MessageLengthFieldBaseFrameDecoder(2048, Unpooled.copiedBuffer("##".getBytes())));
+                        pipeline.addLast(new MessageHandlerCodec());
                         pipeline.addLast(new ClientInboundHandler());
                     }
                 });

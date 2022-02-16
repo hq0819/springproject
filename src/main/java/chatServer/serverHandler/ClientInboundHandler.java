@@ -12,9 +12,7 @@ public class ClientInboundHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
-        if (message instanceof LoginMessage){
-            System.out.println(message);
-        }
+        System.out.println(message.getContent());
     }
 
     @Override

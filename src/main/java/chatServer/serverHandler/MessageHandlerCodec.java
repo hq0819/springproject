@@ -1,10 +1,9 @@
 package chatServer.serverHandler;
 
+import chatServer.message.CallBackMessage;
 import chatServer.message.LoginMessage;
 import chatServer.message.Message;
 import chatServer.message.MessageType;
-import chatServer.utils.TokenUtil;
-import io.jsonwebtoken.Claims;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -19,9 +18,7 @@ public class MessageHandlerCodec extends ByteToMessageCodec<Message> {
         byteBuf.writeBytes(message.messageType().getCode().getBytes());
         byteBuf.writeInt(message.getVersion());
         byteBuf.writeInt(message.getMagicNum());
-        byte[] bytes = message.getToken().getBytes();
-        System.out.println(bytes.length);
-        byteBuf.writeBytes(bytes);
+        byteBuf.writeBytes(message.getToken().getBytes());
         byteBuf.writeBytes(message.getContent().getBytes(StandardCharsets.UTF_8));
         byteBuf.writeBytes("##".getBytes(StandardCharsets.UTF_8));
         ctx.writeAndFlush(byteBuf);
@@ -42,7 +39,7 @@ public class MessageHandlerCodec extends ByteToMessageCodec<Message> {
                 message = new LoginMessage();
                 break;
             default:
-                message = null;
+                message = new CallBackMessage();
                 break;
         }
 
@@ -51,8 +48,5 @@ public class MessageHandlerCodec extends ByteToMessageCodec<Message> {
         message.setVersion(version);
         message.setMagicNum(magic);
         list.add(message);
-        Claims claims = TokenUtil.verifyToken(token, "1234");
-        System.out.println(claims);
-
     }
 }

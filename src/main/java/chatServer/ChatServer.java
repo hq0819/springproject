@@ -2,6 +2,7 @@ package chatServer;
 
 import chatServer.serverHandler.MessageHandlerCodec;
 import chatServer.serverHandler.MessageLengthFieldBaseFrameDecoder;
+import chatServer.serverHandler.ServerInboundHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -39,6 +40,7 @@ public class ChatServer {
                             pipeline.addLast(new LoggingHandler());
                            pipeline.addLast(new MessageLengthFieldBaseFrameDecoder(2048, Unpooled.copiedBuffer("##".getBytes())));
                            pipeline.addLast(new MessageHandlerCodec());
+                           pipeline.addLast(new ServerInboundHandler());
                         }
                     });
         try{
