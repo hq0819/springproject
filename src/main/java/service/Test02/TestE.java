@@ -1,6 +1,9 @@
 package service.Test02;
 
-import org.springframework.beans.BeanUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName TestE
@@ -11,17 +14,58 @@ import org.springframework.beans.BeanUtils;
  **/
 public class TestE {
     public static void main(String[] args) {
-        B b = new B();
-        b.setName("zx");
-        b.setAge("18");
-        b.setAddr("xxxx");
-        b.setPhone("1900");
-        B b1 = new B();
-        C c = new C();
-        BeanUtils.copyProperties(b,c);
+        Student a = new Student("张三", "数学", 23);
+        Student b = new Student("李四", "数学", 23);
+        Student c = new Student("王五", "数学", 23);
+        Student f = new Student("张三", "语文", 23);
+        Student g = new Student("李四", "语文", 23);
+        Student h = new Student("王五", "语文", 23);
+        ArrayList<Student> list = new ArrayList<>();
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        list.add(f);
+        list.add(g);
+        list.add(h);
 
-        System.out.println(c);
-        System.out.println(b);
+        HashMap<String, String> collect = list.stream().collect(
+                Collectors.toMap(Student::getSubject,
+                Student::getName, (k, v) -> k + v,
+                HashMap::new));
+        System.out.println(collect);
+
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
