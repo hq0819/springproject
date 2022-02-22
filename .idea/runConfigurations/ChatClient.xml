@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ChatClient" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="chatServer.ChatClient" />
+    <module name="springproject" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="chatServer.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

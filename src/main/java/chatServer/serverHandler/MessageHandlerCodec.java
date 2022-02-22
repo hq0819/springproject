@@ -25,19 +25,20 @@ public class MessageHandlerCodec extends ByteToMessageCodec<Message> {
         bo.close();
         os.close();
         ctx.writeAndFlush(byteBuf);
+        byteBuf.retain();
 
     }
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        byte[] b = new byte[byteBuf.readableBytes()];
-        byteBuf.duplicate().readBytes(b);
-        ByteInputStream bi = new ByteInputStream(b, 0,byteBuf.readableBytes());
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(bytes);
+        ByteInputStream bi = new ByteInputStream(bytes, 0,bytes.length);
         ObjectInputStream is = new ObjectInputStream(bi);
         Message message = (Message) is.readObject();
         list.add(message);
         is.close();
         bi.close();
-
+        byteBuf.retain();
     }
 }

@@ -20,8 +20,7 @@ public class ServerInboundHandler extends SimpleChannelInboundHandler<Message> {
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message message) throws Exception {
-        LoginMessage loginMessage = (LoginMessage) message;
-        String token = loginMessage.getToken();
+        String token = message.getToken();
         Claims claims = TokenUtil.verifyToken(token, "1234");
         if (message instanceof LoginMessage){
             CallBackMessage callBackMessage = new CallBackMessage();
@@ -32,14 +31,12 @@ public class ServerInboundHandler extends SimpleChannelInboundHandler<Message> {
             channelGroup.put((String)claims.get("userId"),channel);
             group.add(channel);
         }else if (message instanceof SingleChatMessage){
-            String userId = (String) claims.get("targetUserId");
-            Channel channel = group.find(channelGroup.get(userId).id());
+            SingleChatMessage mes = (SingleChatMessage) message;
+            Channel channel = channelGroup.get(mes.getTagetUserId());
             if (channel== null){
                 System.out.println("数据持久");
             }
-            SingleChatMessage singleChatMessage = new SingleChatMessage();
-            singleChatMessage.setContent(message.getContent());
-            channel.writeAndFlush(message.getContent());
+            channel.writeAndFlush(message);
         }
 
 

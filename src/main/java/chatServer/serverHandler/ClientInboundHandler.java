@@ -1,31 +1,15 @@
 package chatServer.serverHandler;
 
-import chatServer.message.LoginMessage;
 import chatServer.message.Message;
-import chatServer.utils.TokenUtil;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import java.util.HashMap;
-
-public class ClientInboundHandler extends SimpleChannelInboundHandler<Message> {
-
+public class ClientInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
-        System.out.println(message.getContent());
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        HashMap<String, Object> claims = new HashMap<>();
-        claims.put("userId","hq");
-        claims.put("passwd","123");
-        String userToken = TokenUtil.getUserToken(claims, "1234", 1000 * 10);
-        Message loginMessage= new LoginMessage();
-        loginMessage.setMagicNum(12);
-        loginMessage.setVersion(1);
-        loginMessage.setToken(userToken);
-        loginMessage.setContent("login");
-        ctx.write(loginMessage);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof Message){
+            Message m = (Message) msg;
+            System.out.println(m.getContent());
+        }
     }
 }
