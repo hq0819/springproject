@@ -39,6 +39,5 @@ public class MessageHandlerCodec extends ByteToMessageCodec<Message> {
         list.add(message);
         is.close();
         bi.close();
-        byteBuf.retain();
     }
 }
