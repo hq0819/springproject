@@ -4,6 +4,7 @@ import chatServer.serverHandler.MessageHandlerCodec;
 import chatServer.serverHandler.MessageLengthFieldBaseFrameDecoder;
 import chatServer.serverHandler.ServerInboundHandler;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -32,8 +33,11 @@ public class ChatServer {
         this.server.channel(NioServerSocketChannel.class)
                     .group(boss,worker)
                     .option(ChannelOption.SO_BACKLOG,1024)
+                .option(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(false))
                     .childOption(ChannelOption.SO_KEEPALIVE,true)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                .childOption(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(false))
+
+                .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();

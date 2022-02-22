@@ -1,52 +1,43 @@
 package chatServer.serverHandler;
 
-import chatServer.message.CallBackMessage;
-import chatServer.message.LoginMessage;
 import chatServer.message.Message;
-import chatServer.message.MessageType;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 
-import java.nio.charset.Charset;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class MessageHandlerCodec extends ByteToMessageCodec<Message> {
     @Override
     protected void encode(ChannelHandlerContext ctx, Message message, ByteBuf byteBuf) throws Exception {
-        byteBuf.writeBytes(message.messageType().getCode().getBytes());
-        byteBuf.writeInt(message.getVersion());
-        byteBuf.writeInt(message.getMagicNum());
-        byteBuf.writeBytes(message.getToken().getBytes());
-        byteBuf.writeBytes(message.getContent().getBytes(StandardCharsets.UTF_8));
+        ByteOutputStream bo = new ByteOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(bo);
+        os.writeObject(message);
+        os.flush();
+        byte[] bytes = bo.getBytes();
+        byteBuf.writeBytes(bytes);
         byteBuf.writeBytes("##".getBytes(StandardCharsets.UTF_8));
+        bo.close();
+        os.close();
         ctx.writeAndFlush(byteBuf);
 
     }
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        String messageType = (String) byteBuf.readCharSequence(5, Charset.defaultCharset());
-        int version = byteBuf.readInt();
-        int magic =  byteBuf.readInt();
-        String token = (String) byteBuf.readCharSequence(128, Charset.defaultCharset());
-        int i = byteBuf.readableBytes();
-        Message message ;
-        String content = (String) byteBuf.readCharSequence(i, Charset.defaultCharset());
-        switch (MessageType.getEnumByCode(messageType)){
-            case LOGINMESSAGE:
-                message = new LoginMessage();
-                break;
-            default:
-                message = new CallBackMessage();
-                break;
-        }
-
-        message.setContent(content);
-        message.setToken(token);
-        message.setVersion(version);
-        message.setMagicNum(magic);
+        byte[] b = new byte[byteBuf.readableBytes()];
+        byteBuf.duplicate().readBytes(b);
+        ByteInputStream bi = new ByteInputStream(b, 0,byteBuf.readableBytes());
+        ObjectInputStream is = new ObjectInputStream(bi);
+        Message message = (Message) is.readObject();
         list.add(message);
+        is.close();
+        bi.close();
+
     }
 }

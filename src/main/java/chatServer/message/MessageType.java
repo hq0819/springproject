@@ -2,7 +2,9 @@ package chatServer.message;
 
 public enum MessageType {
     LOGINMESSAGE("login","登录"),
-    CALLBACKMESSAGE("cback","回执消息");
+    CALLBACKMESSAGE("cback","回执消息"),
+    SINGLECHATMESSAGE("singl","单聊");
+
 
     private String code;
     private String name;

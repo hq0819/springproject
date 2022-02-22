@@ -18,4 +18,6 @@ public class Test02 {
 
         Condition condition = lock.newCondition();
     }
+
+
 }
