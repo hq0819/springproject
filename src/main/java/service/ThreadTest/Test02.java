@@ -1,8 +1,6 @@
 package service.ThreadTest;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import service.Test02.B;
 
 /**
  * @ClassName Test02
@@ -13,11 +11,12 @@ import java.util.concurrent.locks.ReentrantLock;
  **/
 public class Test02 {
 
-    public static void main(String[] args) {
-        Lock lock = new ReentrantLock();
+    public void test(){
+        B b = new B(){
 
-        Condition condition = lock.newCondition();
+        };
     }
+
 
 
 }
